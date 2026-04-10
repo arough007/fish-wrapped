@@ -1,13 +1,22 @@
 # Shell tracking for detailed command history
 # Logs every command execution with timestamp, duration, exit code, directory, and command
 
-function __shell_track_init --on-event fish_greeting
-    mkdir -p ~/.local/share/shell-track
-    if not command -q perl
-        echo "shell-track: perl not found — command tracking disabled" >&2
-        set -g __shell_track_disabled 1
-    end
+# Run at shell startup (conf.d is sourced when fish starts)
+mkdir -p ~/.local/share/shell-track
+
+if not command -q perl
+    echo "shell-track: perl not found — command tracking disabled" >&2
+    set -g __shell_track_disabled 1
 end
+
+# January reminder to run Shell Wrapped for last year
+set -l __shell_track_month (date +%m)
+set -l __shell_track_last_year (math (date +%Y) - 1)
+if test "$__shell_track_month" = "01"; and not test -f ~/.local/share/shell-track/wrapped_seen_$__shell_track_last_year
+    echo "🎉 It's a new year! Run 'shell_wrapped "$__shell_track_last_year"0101 "$__shell_track_last_year"1231' to see your $__shell_track_last_year Shell Wrapped."
+    echo "   (Run 'shell_wrapped --dismiss' to hide this)"
+end
+set -e __shell_track_month __shell_track_last_year
 
 function __shell_track_pre --on-event fish_preexec
     set -q __shell_track_disabled; and return
