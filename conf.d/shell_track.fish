@@ -1,7 +1,5 @@
 # Shell tracking for detailed command history
 # Logs every command execution with timestamp, duration, exit code, directory, and command
-# Manual install: cp shell_track.fish ~/.config/fish/conf.d/shell_track.fish
-# Fisher install: fisher install <yourname>/fish-wrapped
 
 function __shell_track_init --on-event fish_greeting
     mkdir -p ~/.local/share/shell-track
