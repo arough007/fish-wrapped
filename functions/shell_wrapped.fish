@@ -1,5 +1,5 @@
 function shell_wrapped --description "Shell Wrapped - your year in the terminal"
-    set -l script ~/.local/share/shell-track/shell_wrapped.py
+    set -l script ~/.config/fish/functions/shell_wrapped.py
 
     if not test -f $script
         echo "shell_wrapped: script not found at $script" >&2
