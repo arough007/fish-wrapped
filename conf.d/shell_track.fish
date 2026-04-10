@@ -3,13 +3,19 @@
 
 function __shell_track_init --on-event fish_greeting
     mkdir -p ~/.local/share/shell-track
+    if not command -q perl
+        echo "shell-track: perl not found — command tracking disabled" >&2
+        set -g __shell_track_disabled 1
+    end
 end
 
 function __shell_track_pre --on-event fish_preexec
+    set -q __shell_track_disabled; and return
     set -g __shell_track_start (perl -MTime::HiRes=time -e 'printf "%.0f\n", time()*1000')
 end
 
 function __shell_track_post --on-event fish_postexec
+    set -q __shell_track_disabled; and return
     set -l exit_code $status
     set -l end_time (perl -MTime::HiRes=time -e 'printf "%.0f\n", time()*1000')
     set -l duration 0

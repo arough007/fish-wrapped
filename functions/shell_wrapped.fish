@@ -9,7 +9,10 @@ function shell_wrapped --description "Shell Wrapped - your year in the terminal"
 
     if command -q uv
         uv run $script $argv
-    else
+    else if command -q python3
         python3 $script $argv
+    else
+        echo "shell_wrapped: requires uv or python3 — https://docs.astral.sh/uv/" >&2
+        return 1
     end
 end
