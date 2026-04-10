@@ -33,6 +33,7 @@ A fish shell plugin that tracks every command you run and generates a Spotify Wr
 ✅ SUCCESS RATE
   → 94.3% of commands succeeded
   → ✓ 4,547 succeeded   ✗ 274 failed
+  → Most frustrating: npm (12 failures)
 
 ⏱️  DURATION STATS
   → Speed demon:     3,901 commands under 1 second
@@ -44,6 +45,22 @@ A fish shell plugin that tracks every command you run and generates a Spotify Wr
   → Command diversity: 312 unique commands
   → Longest command:   284 characters
 ```
+
+## Why fish-wrapped?
+
+Fish's built-in history only records the command text and a timestamp. fish-wrapped's custom tracker adds three things fish doesn't capture:
+
+| | fish history | fish-wrapped |
+|---|:---:|:---:|
+| Command text | ✅ | ✅ |
+| Timestamp | ✅ | ✅ |
+| **Duration** | ❌ | ✅ |
+| **Exit code** | ❌ | ✅ |
+| **Working directory** | ❌ | ✅ |
+
+That extra data unlocks the **Success Rate**, **Duration Stats**, and **Workspace** sections of the report, and makes everything else more accurate. It also enables year-over-year comparisons — every section shows a delta against the equivalent previous period, so you see not just what you did but whether you're doing more or less of it than before.
+
+The plugin still falls back to fish's built-in history if the tracker hasn't been running yet, so it works from day one (just without the exit code and duration sections).
 
 ## Requirements
 
@@ -77,19 +94,29 @@ curl -sL https://raw.githubusercontent.com/arough007/fish-wrapped/master/functio
 Once installed, every command you run is silently logged. To generate your report:
 
 ```fish
-shell_wrapped
+shell_wrapped          # current year, Jan 1 through today
+shell_wrapped 2025     # full calendar year 2025
+shell_wrapped 20260101 20260630   # any custom date range
 ```
 
-By default this covers January 1 of the current year through today. You can pass a custom date range:
+Each section compares your current period against the equivalent previous period, so you can see trends over time.
 
-```fish
-shell_wrapped 20260101 20260630   # first half of 2026
-shell_wrapped 20250101 20251231   # full year 2025
+The **Success Rate**, **Duration Stats**, and **Workspace** sections require shell-track data, since fish's built-in history doesn't record exit codes, timings, or working directories.
+
+### A note on fish's built-in history
+
+fish-wrapped does not fall back to fish's built-in history. Fish history only stores the *most recent* invocation of each unique command, not every run — so importing it would make volume counts, top command rankings, time patterns, and streaks all incorrect. Data collection starts from the moment the plugin is installed. After a week or two of normal use the report becomes meaningful; after a full year it's great.
+
+### January reminder
+
+In January, opening a new shell shows:
+
+```
+🎉 It's a new year! Run 'shell_wrapped 2025' to see your 2025 Shell Wrapped.
+   (Run 'shell_wrapped --dismiss' to hide this)
 ```
 
-Each section compares your current period against the equivalent previous period (e.g. last year, or the same number of days immediately before the start date).
-
-The **Success Rate** and **Duration Stats** sections only appear when using shell-track data (not fish's built-in history), since fish history doesn't record exit codes or timings.
+It appears on every new shell in January until you either run `shell_wrapped` or `shell_wrapped --dismiss`, after which it's suppressed for the rest of the year.
 
 ## How it works
 

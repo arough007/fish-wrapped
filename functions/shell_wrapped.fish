@@ -5,7 +5,7 @@ function shell_wrapped --description "Shell Wrapped - your year in the terminal"
     if test (count $argv) -eq 1; and test "$argv[1]" = "--dismiss"
         set -l last_year (math (date +%Y) - 1)
         touch ~/.local/share/shell-track/wrapped_seen_$last_year
-        echo "Dismissed. Run 'shell_wrapped "$last_year"0101 "$last_year"1231' whenever you're ready."
+        echo "Dismissed. Run 'shell_wrapped $last_year' whenever you're ready."
         return 0
     end
 

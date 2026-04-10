@@ -18,7 +18,7 @@ end
 set -l __shell_track_month (date +%m)
 set -l __shell_track_last_year (math (date +%Y) - 1)
 if test "$__shell_track_month" = "01"; and not test -f ~/.local/share/shell-track/wrapped_seen_$__shell_track_last_year
-    echo "🎉 It's a new year! Run 'shell_wrapped "$__shell_track_last_year"0101 "$__shell_track_last_year"1231' to see your $__shell_track_last_year Shell Wrapped."
+        echo "🎉 It's a new year! Run 'shell_wrapped $__shell_track_last_year' to see your $__shell_track_last_year Shell Wrapped."
     echo "   (Run 'shell_wrapped --dismiss' to hide this)"
 end
 set -e __shell_track_month __shell_track_last_year

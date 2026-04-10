@@ -66,66 +66,16 @@ def parse_shell_track(log_path: Path) -> list[dict]:
     return entries
 
 
-def parse_fish_history(history_path: Path) -> list[dict]:
-    """Parse fish history YAML-like format"""
-    entries = []
-    current_cmd = None
-    current_when = None
-    current_paths: list[str] = []
-    in_paths = False
-
-    with open(history_path, errors="replace") as f:
-        for line in f:
-            line = line.rstrip()
-            if line.startswith("- cmd:"):
-                if current_cmd and current_when:
-                    entries.append({
-                        "timestamp": current_when,
-                        "duration_ms": None,
-                        "exit_code": None,
-                        "pwd": current_paths[0] if current_paths else None,
-                        "cmd": current_cmd,
-                    })
-                current_cmd = line[len("- cmd:"):].strip()
-                current_when = None
-                current_paths = []
-                in_paths = False
-            elif line.startswith("  when:"):
-                try:
-                    current_when = int(line[len("  when:"):].strip())
-                except ValueError:
-                    pass
-                in_paths = False
-            elif line.startswith("  paths:"):
-                in_paths = True
-            elif line.startswith("    - ") and in_paths:
-                current_paths.append(line.strip()[2:])
-            else:
-                in_paths = False
-
-    if current_cmd and current_when:
-        entries.append({
-            "timestamp": current_when,
-            "duration_ms": None,
-            "exit_code": None,
-            "pwd": current_paths[0] if current_paths else None,
-            "cmd": current_cmd,
-        })
-
-    return entries
-
-
 def load_entries() -> tuple[list[dict], str]:
     shell_track_log = Path.home() / ".local/share/shell-track/history.log"
-    fish_history = Path.home() / ".local/share/fish/fish_history"
 
     if shell_track_log.exists():
         return parse_shell_track(shell_track_log), f"shell-track ({shell_track_log})"
-    elif fish_history.exists():
-        return parse_fish_history(fish_history), f"fish history ({fish_history})"
     else:
-        console.print("[red]No history file found.[/red]")
-        console.print("[dim]Expected: ~/.local/share/shell-track/history.log or ~/.local/share/fish/fish_history[/dim]")
+        console.print("[red]No shell-track data found.[/red]")
+        console.print(f"[dim]Expected: {shell_track_log}[/dim]")
+        console.print("[dim]The tracker starts collecting data automatically once the plugin is installed.[/dim]")
+        console.print("[dim]Run a few commands and try again.[/dim]")
         sys.exit(1)
 
 
