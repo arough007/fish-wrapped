@@ -60,8 +60,6 @@ Fish's built-in history only records the command text and a timestamp. fish-wrap
 
 That extra data unlocks the **Success Rate**, **Duration Stats**, and **Workspace** sections of the report, and makes everything else more accurate. It also enables year-over-year comparisons — every section shows a delta against the equivalent previous period, so you see not just what you did but whether you're doing more or less of it than before.
 
-The plugin still falls back to fish's built-in history if the tracker hasn't been running yet, so it works from day one (just without the exit code and duration sections).
-
 ## Requirements
 
 - [fish](https://fishshell.com/) 3.6+
