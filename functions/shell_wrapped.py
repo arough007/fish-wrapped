@@ -12,10 +12,17 @@ from collections import Counter
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from rich import box
-from rich.console import Console
-from rich.panel import Panel
-from rich.text import Text
+try:
+    from rich import box
+    from rich.console import Console
+    from rich.panel import Panel
+    from rich.text import Text
+except ImportError:
+    print("shell_wrapped: 'rich' is not installed.", file=sys.stderr)
+    print("  Best fix:  install uv and it will be handled automatically", file=sys.stderr)
+    print("             https://docs.astral.sh/uv/getting-started/installation/", file=sys.stderr)
+    print("  Quick fix: pip install rich", file=sys.stderr)
+    sys.exit(1)
 
 console = Console()
 
