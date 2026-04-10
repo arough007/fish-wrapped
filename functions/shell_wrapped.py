@@ -9,7 +9,7 @@ import argparse
 import re
 import sys
 from collections import Counter
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from pathlib import Path
 
 try:
@@ -117,15 +117,15 @@ def parse_fish_history(history_path: Path) -> list[dict]:
 
 def load_entries() -> tuple[list[dict], str]:
     shell_track_log = Path.home() / ".local/share/shell-track/history.log"
-    fish_history = Path("fish_history")
+    fish_history = Path.home() / ".local/share/fish/fish_history"
 
     if shell_track_log.exists():
         return parse_shell_track(shell_track_log), f"shell-track ({shell_track_log})"
     elif fish_history.exists():
-        return parse_fish_history(fish_history), "fish history (./fish_history)"
+        return parse_fish_history(fish_history), f"fish history ({fish_history})"
     else:
         console.print("[red]No history file found.[/red]")
-        console.print("[dim]Expected: ~/.local/share/shell-track/history.log or ./fish_history[/dim]")
+        console.print("[dim]Expected: ~/.local/share/shell-track/history.log or ~/.local/share/fish/fish_history[/dim]")
         sys.exit(1)
 
 

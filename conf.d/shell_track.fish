@@ -1,6 +1,11 @@
 # Shell tracking for detailed command history
 # Logs every command execution with timestamp, duration, exit code, directory, and command
 
+# Only run for interactive shells — skip for scripts and `fish -c ...`
+if not status is-interactive
+    return
+end
+
 # Run at shell startup (conf.d is sourced when fish starts)
 mkdir -p ~/.local/share/shell-track
 
@@ -24,8 +29,8 @@ function __shell_track_pre --on-event fish_preexec
 end
 
 function __shell_track_post --on-event fish_postexec
+    set -l exit_code $status  # capture before anything else changes $status
     set -q __shell_track_disabled; and return
-    set -l exit_code $status
     set -l end_time (perl -MTime::HiRes=time -e 'printf "%.0f\n", time()*1000')
     set -l duration 0
 
