@@ -6,6 +6,7 @@
 """🎉 Shell Wrapped - Your year in the terminal"""
 
 import argparse
+import re
 import sys
 from collections import Counter
 from datetime import datetime, timedelta, timezone
@@ -149,6 +150,11 @@ def section(icon: str, title: str, color: str) -> Text:
 
 
 def main():
+    # Allow `shell_wrapped 2025` as shorthand for `shell_wrapped 20250101 20251231`
+    if len(sys.argv) == 2 and re.fullmatch(r"\d{4}", sys.argv[1]):
+        year = sys.argv[1]
+        sys.argv[1:] = [f"{year}0101", f"{year}1231"]
+
     parser = argparse.ArgumentParser(description="Shell Wrapped — your terminal in review")
     parser.add_argument(
         "start",
@@ -156,7 +162,7 @@ def main():
         type=parse_date,
         default=datetime(datetime.now().year, 1, 1),
         metavar="YYYYMMDD",
-        help="Start date (default: Jan 1 of current year)",
+        help="Start date (default: Jan 1 of current year). Pass a 4-digit year (e.g. 2025) to cover the full year.",
     )
     parser.add_argument(
         "end",
