@@ -132,7 +132,7 @@ Log format:
 timestamp_s|duration_ms|exit_code|pwd|cmd
 ```
 
-`shell_wrapped` reads this log (falling back to fish's built-in history at `~/.local/share/fish/fish_history` if the log is missing) and renders the report using [Rich](https://github.com/Textualize/rich).
+`shell_wrapped` reads this log and renders the report using [Rich](https://github.com/Textualize/rich).
 
 ## License
 
